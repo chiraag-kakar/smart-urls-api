@@ -2,12 +2,19 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import path from 'path';
 
 import logging from './config/logging';
 import config from './config/config';
 
-require('dotenv').config();
-require('./db/mongo');
+import * as dotenv from "dotenv";
+
+import db from './db/db';
+import userRoutes from './routes/user.routes';
+dotenv.config();
+
+
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const NAMESPACE = 'Server';
 
@@ -52,6 +59,7 @@ app.use((req, res, next) => {
 });
 
 /** Routes go here */
+app.use('/api/users', userRoutes);
 
 /** Error handling */
 app.use((req, res, next) => {
@@ -61,6 +69,15 @@ app.use((req, res, next) => {
         message: error.message
     });
 });
+
+// if (process.env.NODE_ENV === 'production') {
+//     // Serve any static files
+//     app.use(express.static(path.join(__dirname, 'client/build')));
+//     // Handle React routing, return all requests to React app
+//     app.get('*', function (req, res) {
+//       res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+//     });
+//   }
 
 const httpServer = http.createServer(app);
 httpServer.listen(config.server.port, () => logging.info(NAMESPACE, `Server is running ${config.server.hostname}:${config.server.port}`));
