@@ -2,7 +2,7 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-import path from 'path';
+// import path from 'path';
 
 import logging from './config/logging';
 import config from './config/config';
