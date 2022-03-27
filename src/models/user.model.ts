@@ -1,6 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
 import IUser from '../interfaces/user';
-import * as validator from 'validator';
 import logging from '../config/logging';
 
 const userSchema = new mongoose.Schema({
@@ -14,24 +13,14 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true,
         unique: true,
-        lowercase: true,
-        validate(value:String) {
-            // if (!validator.isEmail(value)) {
-            //     throw new Error('Email is invalid');
-            // }
-        }
+        lowercase: true
     },
     password: {
         type: String,
         required: true,
         minlength: 7,
-        trim: true,
-        validate(value:String) {
-            if (value.toLowerCase().includes('password')) {
-                throw new Error("Password can not contain 'password'");
-            }
-        }
-    },
+        trim: true
+    }
 });
 
 userSchema.post<IUser>('save', function () {

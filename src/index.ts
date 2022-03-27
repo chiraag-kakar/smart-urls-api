@@ -8,10 +8,11 @@ import logging from './config/logging';
 import config from './config/config';
 
 import * as dotenv from "dotenv";
+dotenv.config();
 
 import db from './db/db';
 import userRoutes from './routes/user.routes';
-dotenv.config();
+import urlRoutes from './routes/url.routes';
 
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -60,6 +61,7 @@ app.use((req, res, next) => {
 
 /** Routes go here */
 app.use('/api/users', userRoutes);
+app.use('/api/urls', urlRoutes);
 
 /** Error handling */
 app.use((req, res, next) => {
