@@ -7,4 +7,3 @@ const serverHealthCheck = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export default { serverHealthCheck };
-

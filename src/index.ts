@@ -7,13 +7,12 @@ import cors from 'cors';
 import logging from './config/logging';
 import config from './config/config';
 
-import * as dotenv from "dotenv";
+import * as dotenv from 'dotenv';
 dotenv.config();
 
 import db from './db/db';
 import userRoutes from './routes/user.routes';
 import urlRoutes from './routes/url.routes';
-
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 

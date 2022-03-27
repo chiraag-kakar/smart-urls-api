@@ -13,4 +13,4 @@ mongoose
         throw err;
     });
 const db = mongoose.connection;
-export default db
+export default db;

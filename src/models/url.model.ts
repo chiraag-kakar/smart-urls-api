@@ -5,7 +5,7 @@ import shortid from 'shortid';
 const urlSchema = new mongoose.Schema({
     longUrl: {
         type: String,
-        required: true,
+        required: true
     },
     shortUrl: {
         type: String

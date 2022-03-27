@@ -1,5 +1,5 @@
 import express from 'express';
-import {auth} from '../middlewares/authMiddleware';
+import { auth } from '../middlewares/authMiddleware';
 import * as userController from '../controllers/userController';
 const router = express.Router();
 router.get('/validate', auth, userController.validateToken); //to validate token

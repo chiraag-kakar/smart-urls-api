@@ -8,7 +8,7 @@ import config from '../config/config';
 
 export const signToken = (id: ObjectId): string => {
     return jwt.sign({ id: id }, config.server.token.secret, {
-        expiresIn:config.server.token.expireTime
+        expiresIn: config.server.token.expireTime
     });
 };
 

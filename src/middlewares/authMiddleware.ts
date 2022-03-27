@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 
 import config from '../config/config';
 import logging from '../config/logging';
-import * as dotenv from "dotenv";
+import * as dotenv from 'dotenv';
 dotenv.config();
 
 const NAMESPACE = 'Auth';
@@ -26,7 +26,7 @@ export const auth = async (req: UserRequest, res: Response, next: NextFunction):
         interface JwtPayload {
             _id: string;
         }
-        
+
         const { _id } = jwt.verify(token, config.server.token.secret) as JwtPayload;
         const user = await User.findOne({ _id, 'tokens.token': token });
         if (!user) {
