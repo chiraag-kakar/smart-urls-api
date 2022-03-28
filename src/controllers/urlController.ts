@@ -38,7 +38,11 @@ export async function redirectToUrl(req: Request, res: Response, next: NextFunct
 
         if (!url) {
             return res.status(404).json({ error: 'URL not registered!' });
-        } else {
+        }
+        // else if {
+        // compare using time.now
+        // }
+        else {
             return res.status(200).json({ longUrl: url.longUrl });
         }
     } catch (error) {

@@ -15,7 +15,6 @@ export const auth = async (req: UserRequest, res: Response, next: NextFunction):
     try {
         logging.info(NAMESPACE, 'Validating token');
         let token = req.headers.authorization?.split(' ')[1];
-
         if (!token) {
             return res.status(401).json({
                 status: 'fail',
@@ -24,11 +23,14 @@ export const auth = async (req: UserRequest, res: Response, next: NextFunction):
         }
 
         interface JwtPayload {
-            _id: string;
+            id: string;
         }
 
-        const { _id } = jwt.verify(token, config.server.token.secret) as JwtPayload;
-        const user = await User.findOne({ _id, 'tokens.token': token });
+        const decode = jwt.verify(token, config.server.token.secret) as JwtPayload;
+        console.log(token);
+        console.log('------------');
+        console.log(decode);
+        const user = await User.findOne({ _id: decode.id });
         if (!user) {
             return res.status(401).json({
                 status: 'fail',
@@ -39,6 +41,7 @@ export const auth = async (req: UserRequest, res: Response, next: NextFunction):
         req.user = user;
         next();
     } catch (e) {
+        console.log(e);
         return res.status(401).send({ error: 'Please Login!' });
     }
 };

@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import { createUser, signToken, validateUser } from '../services/user.service';
 import config from '../config/config';
 import logging from '../config/logging';
-
+import User from '../models/user.model';
 const NAMESPACE = 'User Controller';
 
 export const validateToken = (req: Request, res: Response, next: NextFunction) => {
@@ -30,7 +30,9 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 
 export const loginUser = async (req: Request, res: Response, next: NextFunction): Promise<Response | undefined> => {
     try {
+        console.log('called');
         const user = await validateUser(req.body.email, req.body.password);
+        console.log(user);
         // if (!user) {
         // }
         if (user) {
@@ -38,6 +40,26 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
             return res.status(201).send({ user: user, token: token });
         }
     } catch (e) {
+        console.log('error called');
+        console.log(e);
         next(e);
     }
+};
+
+export const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
+    User.find()
+        .select('-password')
+        .exec()
+        .then((users) => {
+            return res.status(200).json({
+                users: users,
+                count: users.length
+            });
+        })
+        .catch((error) => {
+            return res.status(500).json({
+                message: error.message,
+                error
+            });
+        });
 };

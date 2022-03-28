@@ -5,6 +5,7 @@ import { LeanDocument, ObjectId } from 'mongoose';
 import IUser from '../interfaces/user';
 import User from '../models/user.model';
 import config from '../config/config';
+import { string } from 'joi';
 
 export const signToken = (id: ObjectId): string => {
     return jwt.sign({ id: id }, config.server.token.secret, {
@@ -12,7 +13,8 @@ export const signToken = (id: ObjectId): string => {
     });
 };
 
-export const validatePassword = async (password: string, userPassword: IUser['password']): Promise<boolean> => await bcrypt.compare(password, userPassword);
+export const validatePassword = async (password: string, userPassword: IUser['password']): Promise<boolean> => password === userPassword;
+// await bcrypt.compare(password, userPassword);
 
 export const createUser = async (userInput: IUser): Promise<Omit<LeanDocument<IUser>, '__v' | 'password'>> => {
     const user = new User(userInput);
@@ -28,4 +30,5 @@ export const validateUser = async (email: IUser['email'], password: IUser['passw
     if (await validatePassword(password, user.password)) {
         return omit(user.toJSON(), ['password', '__v']);
     }
+    return false;
 };

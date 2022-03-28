@@ -6,4 +6,6 @@ export default interface IUrl extends Document {
     shortUrl: string;
     user: IUser['_id'];
     clicks: number;
+    //createdAt
+    //expireAt
 }

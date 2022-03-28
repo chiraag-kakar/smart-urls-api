@@ -5,4 +5,5 @@ const router = express.Router();
 router.get('/validate', auth, userController.validateToken); //to validate token
 router.post('/registerUser', userController.registerUser); // to register user
 router.post('/loginUser', userController.loginUser); // to login user
+router.post('/getAllUsers', userController.getAllUsers); // to login user
 export = router;
