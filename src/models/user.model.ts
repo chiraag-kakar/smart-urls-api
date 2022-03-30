@@ -27,5 +27,5 @@ userSchema.post<IUser>('save', function () {
     logging.info('Mongo', 'Checkout the book we just saved: ', this);
 });
 
-const UserModel = mongoose.model<IUser>('User', userSchema);
+const UserModel = mongoose.model<IUser>('UserUrl', userSchema);
 export default UserModel;
