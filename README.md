@@ -1,4 +1,4 @@
-# Ticket Booking API
+# URL Shortener API
 
 - Backend for URL shortener application using NodeJs, Express, Typescript and MongoDB
 

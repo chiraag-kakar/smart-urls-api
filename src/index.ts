@@ -60,7 +60,7 @@ app.use((req, res, next) => {
 });
 
 /** Routes go here */
-app.use('/api/health',health)
+app.use('/api/health', health);
 app.use('/api/user', userRoutes);
 app.use('/api/urls', urlRoutes);
 
