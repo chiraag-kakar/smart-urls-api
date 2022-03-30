@@ -1,6 +1,6 @@
-import http from 'http';
+import http, { request } from 'http';
 import bodyParser from 'body-parser';
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction, response } from 'express';
 import cors from 'cors';
 import { errorMiddleware } from './utils/error';
 // import path from 'path';
@@ -16,6 +16,7 @@ import urlRoutes from './routes/url.routes';
 import health from './routes/health';
 
 import db from './db/db';
+import { any } from 'joi';
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const NAMESPACE = 'Server';
@@ -63,10 +64,36 @@ app.use((req, res, next) => {
 /** Routes go here */
 app.use('/api/health', health);
 app.use('/api/user', userRoutes);
-app.use('/api/urls', urlRoutes);
+app.use('/api/url', urlRoutes);
 
 /** Error handling */
-app.use(errorMiddleware);
 
 const httpServer = http.createServer(app);
 httpServer.listen(config.server.port, () => logging.info(NAMESPACE, `Server is running ${config.server.hostname}:${config.server.port}`));
+function req(
+    req: any,
+    Request: { new (input: RequestInfo, init?: RequestInit | undefined): globalThis.Request; prototype: globalThis.Request },
+    res: any,
+    Response: {
+        new (body?: BodyInit | null | undefined, init?: ResponseInit | undefined): globalThis.Response;
+        prototype: globalThis.Response;
+        error(): globalThis.Response;
+        redirect(url: string | URL, status?: number | undefined): globalThis.Response;
+    }
+): import('express-serve-static-core').RequestHandler<import('express-serve-static-core').ParamsDictionary, any, any, import('qs').ParsedQs, Record<string, any>> {
+    throw new Error('Function not implemented.');
+}
+
+function res(
+    req: any,
+    Request: { new (input: RequestInfo, init?: RequestInit | undefined): globalThis.Request; prototype: globalThis.Request },
+    res: any,
+    Response: {
+        new (body?: BodyInit | null | undefined, init?: ResponseInit | undefined): globalThis.Response;
+        prototype: globalThis.Response;
+        error(): globalThis.Response;
+        redirect(url: string | URL, status?: number | undefined): globalThis.Response;
+    }
+): import('express-serve-static-core').RequestHandler<import('express-serve-static-core').ParamsDictionary, any, any, import('qs').ParsedQs, Record<string, any>> {
+    throw new Error('Function not implemented.');
+}

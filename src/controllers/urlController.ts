@@ -2,6 +2,7 @@
 import { Request, Response, NextFunction } from 'express';
 import UrlModel from '../models/url.model';
 import { UserRequest } from '../interfaces/user';
+import { time } from 'console';
 
 const NAMESPACE = 'Url Controller';
 
@@ -17,7 +18,9 @@ export async function quickCreate(req: Request, res: Response, next: NextFunctio
 
 export async function createShortUrl(req: UserRequest, res: Response, next: NextFunction) {
     try {
+        console.log('aap andar aaye ki nhi');
         let url = await UrlModel.findOne({ longUrl: req.body.longUrl, user: req.user });
+        console.log(url);
         if (url) {
             return res.status(400).json({
                 error: 'You have already have a shortened version of this url!'
@@ -35,14 +38,12 @@ export async function createShortUrl(req: UserRequest, res: Response, next: Next
 export async function redirectToUrl(req: Request, res: Response, next: NextFunction) {
     try {
         let url = await UrlModel.findOneAndUpdate({ shortUrl: req.params.shortUrl }, { $inc: { clicks: 1 } }, { new: true, runValidators: true });
-
+        let currTime = new Date();
         if (!url) {
             return res.status(404).json({ error: 'URL not registered!' });
-        }
-        // else if {
-        // compare using time.now
-        // }
-        else {
+        } else if (currTime.getTime() >= url.expireAt.getTime()) {
+            return res.status(404).json({ error: 'URL Expired!' });
+        } else {
             return res.status(200).json({ longUrl: url.longUrl });
         }
     } catch (error) {

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 export class ErrorHandler extends Error {
     constructor(public statusCode: number, public message: string) {
@@ -7,11 +7,11 @@ export class ErrorHandler extends Error {
     }
 }
 
-export const errorMiddleware = (error: ErrorHandler, req: Request, res: Response) => {
+export const errorMiddleware = (req: Request, res: Response, next: NextFunction, error: ErrorHandler) => {
     const statusCode = error.statusCode || 500;
     const message = error.message;
 
-    return res.send(statusCode).send({
+    return res.status(statusCode).send({
         message
     });
 };
