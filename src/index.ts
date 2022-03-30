@@ -2,6 +2,7 @@ import http from 'http';
 import bodyParser from 'body-parser';
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import { errorMiddleware } from './utils/error';
 // import path from 'path';
 
 import logging from './config/logging';
@@ -10,11 +11,11 @@ import config from './config/config';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import db from './db/db';
 import userRoutes from './routes/user.routes';
 import urlRoutes from './routes/url.routes';
 import health from './routes/health';
 
+import db from './db/db';
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const NAMESPACE = 'Server';
@@ -30,7 +31,7 @@ app.use(
 app.use(express.json());
 
 /** Log the request */
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
     /** Log the req */
     logging.info(NAMESPACE, `METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.socket.remoteAddress}]`);
 
@@ -65,22 +66,7 @@ app.use('/api/user', userRoutes);
 app.use('/api/urls', urlRoutes);
 
 /** Error handling */
-app.use((req, res, next) => {
-    const error = new Error('Not found');
-
-    res.status(404).json({
-        message: error.message
-    });
-});
-
-// if (process.env.NODE_ENV === 'production') {
-//     // Serve any static files
-//     app.use(express.static(path.join(__dirname, 'client/build')));
-//     // Handle React routing, return all requests to React app
-//     app.get('*', function (req, res) {
-//       res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-//     });
-//   }
+app.use(errorMiddleware);
 
 const httpServer = http.createServer(app);
 httpServer.listen(config.server.port, () => logging.info(NAMESPACE, `Server is running ${config.server.hostname}:${config.server.port}`));
