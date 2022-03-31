@@ -18,8 +18,8 @@ export async function quickCreate(req: Request, res: Response, next: NextFunctio
 
 export async function createShortUrl(req: UserRequest, res: Response, next: NextFunction) {
     try {
-        console.log('aap andar aaye ki nhi');
-        let url = await UrlModel.findOne({ longUrl: req.body.longUrl, user: req.user });
+        // let url = await UrlModel.findOne({ longUrl: req.body.longUrl, user: req.user });
+        let url = await UrlModel.findOne({ longUrl: req.body.longUrl});
         console.log(url);
         if (url) {
             return res.status(400).json({
@@ -27,6 +27,7 @@ export async function createShortUrl(req: UserRequest, res: Response, next: Next
             });
         } else {
             url = await new UrlModel({ ...req.body, user: req.user }).save();
+            url = await new UrlModel({ ...req.body}).save();
             return res.status(201).json(url);
         }
     } catch (error) {
@@ -41,9 +42,11 @@ export async function redirectToUrl(req: Request, res: Response, next: NextFunct
         let currTime = new Date();
         if (!url) {
             return res.status(404).json({ error: 'URL not registered!' });
-        } else if (currTime.getTime() >= url.expireAt.getTime()) {
-            return res.status(404).json({ error: 'URL Expired!' });
-        } else {
+        }
+        // else if (currTime.getTime() >= url.expireAt.getTime()) {
+        //     return res.status(404).json({ error: 'URL Expired!' });
+        // } 
+        else {
             return res.status(200).json({ longUrl: url.longUrl });
         }
     } catch (error) {
